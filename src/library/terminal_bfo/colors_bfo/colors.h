@@ -5,8 +5,8 @@
 #ifndef CONSOLE_CODE_EDITOR__COLORS_H
 #define CONSOLE_CODE_EDITOR__COLORS_H
 
-#include "prj_types/String_struct.h"
 #include "bins.h"
+#include "../../string_bfo/String_struct.h"
 
 typedef string COLOR;
 #define free_color(c) free_string(c)
