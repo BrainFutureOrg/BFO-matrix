@@ -15,3 +15,5 @@ add_executable(BFO_matrix
         src/library/tests_bfo/test_funcs.c
         src/library/terminal_bfo/terminal_funcs.h
         src/library/random_bfo/statistical_random.c)
+
+target_link_libraries(BFO_matrix m)
