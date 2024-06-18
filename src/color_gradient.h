@@ -1,0 +1,8 @@
+//
+// Created by kosenko on 18.06.24.
+//
+
+#ifndef BFO_MATRIX_SRC_COLOR_GRADIENT_H
+#define BFO_MATRIX_SRC_COLOR_GRADIENT_H
+
+#endif //BFO_MATRIX_SRC_COLOR_GRADIENT_H

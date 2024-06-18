@@ -16,6 +16,8 @@ add_executable(BFO_matrix
         src/library/terminal_bfo/terminal_funcs.h
         src/library/random_bfo/statistical_random.c
         src/random_letter.c
-        src/random_letter.h)
+        src/random_letter.h
+        src/color_gradient.c
+        src/color_gradient.h)
 
 target_link_libraries(BFO_matrix m)
