@@ -4,4 +4,12 @@ project(BFO_matrix C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(BFO_matrix
-        src/main.c)
+        src/main.c
+        src/library/terminal_bfo/colors_bfo/colors.c
+        src/library/terminal_bfo/colors_bfo/bins.c
+        src/library/terminal_bfo/progress_bar/progres_bar.c
+        src/library/string_bfo/String_array_struct.c
+        src/library/string_bfo/String_struct.c
+        src/library/string_bfo/String_struct_formatting.c
+        src/library/loging_bfo/log.c
+        src/library/tests_bfo/test_funcs.c)
