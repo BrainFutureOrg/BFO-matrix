@@ -6,9 +6,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <errno.h>
-#include "../colors.h"
-#include "../prj_error.h"
-#include "../loging/log.h"
+#include "../terminal_bfo/colors_bfo/colors.h"
+//#include "../prj_error.h"
+#include "../loging_bfo//log.h"
 
 #define TEST_print_formated_error(ftext_error) va_list args;                  \
                                                va_start(args, ftext_error);   \
@@ -25,7 +25,6 @@
                                             unsuccess_test;                          \
                                                                                      \
                                             if (errno){                              \
-                                                print_error();                       \
                                                 errno = 0;                           \
                                             }                                        \
                                                                                      \
@@ -36,7 +35,6 @@
                                             unsuccess_test;                          \
                                                                                      \
                                             if (errno){                              \
-                                                print_error();                       \
                                                 errno = 0;                           \
                                             }                                        \
                                                                                      \
