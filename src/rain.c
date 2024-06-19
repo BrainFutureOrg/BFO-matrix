@@ -7,6 +7,7 @@
 #include "library/random_bfo/statistical_random.h"
 #include "print_raindrop.h"
 #include "library/loging_bfo/log.h"
+#include "default_themes.h"
 
 #define DROP_CHANCE 0.003
 
@@ -114,9 +115,11 @@ void rain_iteration(rain_screen screen){
             unsigned char colors[][3] = {{255,0,0}, {0,255,0}, {255,0,255}};
             double positions[3] = {0,0.7, 1};
             color_gradient_settings settings = {colors, (double *)positions, 3};
-            COLOR bg = color_create_background_rgb(0,0,0);
-            print_raindrop_settings r_settings = {settings, color_interpolator_square, bg};
+            COLOR bg = string_create_new(0);//color_create_background_rgb(0,0,0);
+            //print_raindrop_settings r_settings = {settings, color_interpolator_square, bg};
+            print_raindrop_settings r_settings = theme_Ukraine;
             print_raindrop(rain_list->drop, screen.row_num, screen.col_num, r_settings);
+            free_color(bg);
             prev_rain = rain_list;
             rain_list = rain_list->next;
 

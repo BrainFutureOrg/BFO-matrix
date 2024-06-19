@@ -22,6 +22,8 @@ add_executable(BFO_matrix
         src/rain.c
         src/rain.h
         src/print_raindrop.c
-        src/print_raindrop.h)
+        src/print_raindrop.h
+        src/default_themes.c
+        src/default_themes.h)
 
 target_link_libraries(BFO_matrix m)
