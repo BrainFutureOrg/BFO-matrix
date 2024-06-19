@@ -6,6 +6,7 @@
 #define C_VERSION_STATISTICAL_RANDOM_H
 
 #include <limits.h>
+#include <stdlib.h>
 
 
 #define randint(a, b) (random() % (b-a) + a)
