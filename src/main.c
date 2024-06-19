@@ -58,30 +58,18 @@ int main() {
     setlocale(LC_ALL, "");
     terminal_erase_display;
 
-    init_logger(DEBUG, "log.txt");
+    init_logger(INFO, "log.txt");
     write_log(INFO, "Program start");
 
 //    float snow_chance = 0.05;
     struct winsize size = get_window_size();
     rain_screen rain_screen1 = init_rain(size.ws_col, size.ws_row);
 
-    for (int I = 0; I < 100; ++I)
+    for (int I = 0; I < 200; ++I)
     {
-//        terminal_erase_screen;
-
-        unsigned char colors[][3] = {{255,0,0}, {0,255,0}, {255,0,255}};
-        unsigned char (*colors1)[3] = colors;
-        double positions[3] = {0,0.7, 1};
-        color_gradient_settings settings = {colors, (double *)positions, 3};
-        COLOR bg = color_create_background_rgb(0,0,0);
-        print_raindrop_settings r_settings = {settings, color_interpolator_square, bg};
-        fill_bg(size.ws_row, size.ws_col, r_settings);
-        write_log(INFO, "Screen filed %d", I);
-
+        terminal_erase_screen;
         rain_iteration(rain_screen1);
-        write_log(INFO, "Snow rendered %d", I);
-        fflush(stdout);
-//        printf("C");
+
         fflush(stdout);
         msleep(100);
     }

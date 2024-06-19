@@ -8,11 +8,11 @@
 #include "print_raindrop.h"
 #include "library/loging_bfo/log.h"
 
-#define DROP_CHANCE 0.1
+#define DROP_CHANCE 0.003
 
 rain_drop rain_drop_init()
 {
-    int rain_size = 6;
+    int rain_size = 13;
     return (rain_drop){0, 0, rain_size, 0, calloc(rain_size, sizeof(wchar_t))};
 }
 
@@ -37,6 +37,7 @@ void free_rain_screen(rain_screen screen){
 
 void rain_drop_iteration(rain_drop *drop)
 {
+    write_log(DEBUG, "START RAIN DROP ITERATION");
     wchar_t new_char = get_random_unicode_char();
     if(drop->used == drop->size)
     {
@@ -44,8 +45,13 @@ void rain_drop_iteration(rain_drop *drop)
             drop->line[i] = drop->line[i + 1];
         }
         drop->row++;
+        drop->used--;
+        write_log(DEBUG, "Screen app %d", drop->row);
     }
+    drop->used++;
     drop->line[drop->used - 1] = new_char;
+
+    write_log(DEBUG, "END RAIN DROP ITERATION");
 }
 
 void generate_rain_drop(rain_screen screen)
@@ -100,7 +106,7 @@ void rain_iteration(rain_screen screen){
                 prev_rain->next = rain_list->next;
                 rain_list = rain_list->next;
             }
-            free_rain(for_delete);
+            free_rain_drop(for_delete->drop);
             free(for_delete);
         }
         else
