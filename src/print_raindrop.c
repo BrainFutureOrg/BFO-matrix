@@ -6,6 +6,7 @@
 #include "library/terminal_bfo/terminal_funcs.h"
 
 void print_raindrop(rain_drop raindrop, int row_num, int col_num, print_raindrop_settings settings){
+
     printf("%s", settings.background.line);
     if(raindrop.column<col_num){
         int end = raindrop.size+raindrop.row;

@@ -24,12 +24,12 @@ typedef struct rain{
 
 typedef struct{
     int col_num, row_num;
-    rain *rain_list;
-    wchar_t **screen;
+    rain **rain_list;
 } rain_screen;
 
 rain_screen init_rain(int col_num, int row_num);
 
-void rain_iteration(wchar_t **screen, rain *rain_list);
-void show_rain();
+void rain_iteration(rain_screen screen);
+
+void free_rain_screen(rain_screen screen);
 #endif //BFO_MATRIX_RAIN_H

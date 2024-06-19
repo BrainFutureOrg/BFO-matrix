@@ -11,6 +11,8 @@
 #include <unistd.h>
 #include "./library/terminal_bfo/colors_bfo/colors.h"
 #include "random_letter.h"
+#include "rain.h"
+#include "print_raindrop.h"
 
 #define background_fill color_to_rgb_background(20, 20, 20);
 /* msleep(): Sleep for the requested number of milliseconds. */
@@ -47,72 +49,7 @@ struct winsize get_window_size()
 //    uint x,y:3;
 //};
 
-string generate_snow_string(float snow_chance, int size)
-{
-    string_fast sf = string_fast_create_new(size);
-    for (int I = 0; I < size; ++I)
-    {
-        float chance = rand_plain;
-        if (chance < snow_chance)
-        {
-            string_fast_add_char(&sf, get_random_unicode_char());
-        }
-        else
-        {
-            string_fast_add_char(&sf, ' ');
-        }
-    }
-    return sf.string_part;
-}
 
-string_array generate_snow(float snow_chance)
-{
-    struct winsize w = get_window_size();
-    string_array array = string_array_create();
-    for (int i = 0; i < w.ws_row; ++i)
-    {
-        string_array_push(&array, generate_snow_string(snow_chance, w.ws_col));
-    }
-    write_log(INFO, "snow size = %d", array.size);
-    return array;
-}
-
-void render_snow(string_array *snow, float snow_chance, int num, int even)
-{
-    terminal_invisible_cursor;
-    for (int i = 0; i < snow->size; ++i)
-    {
-        printf("%s\n", snow->elements[i].line);
-        write_log(DEBUG, "Snow showed %d", i);
-    }
-    write_log(DEBUG, "Snow showed");
-    if (num % even == 0)
-    {
-        string poped = string_array_pop(snow);
-        struct winsize w = get_window_size();
-        string new_line = generate_snow_string(snow_chance, w.ws_col);
-        write_log(DEBUG, "New line created");
-        free_string(poped);
-        write_log(DEBUG, "Line fried");
-        string_array_push_to_start(snow, new_line);
-        write_log(INFO, "snow size = %d", snow->size);
-        write_log(DEBUG, "Line added");
-    }
-//    terminal_visible_cursor;
-}
-
-void fill_screen(struct winsize size)
-{
-    background_fill
-    terminal_goto_xy(0, 0);
-    for (int i = 0; i < size.ws_row; i++)
-    {
-        for (int j = 0; j < size.ws_col; j++)
-        {
-            printf(" ");
-        }
-    }
-}
 
 int main() {
     terminal_save_screen;
@@ -124,24 +61,32 @@ int main() {
     init_logger(INFO, "log.txt");
     write_log(INFO, "Program start");
 
-    float snow_chance = 0.05;
-    string_array snow = generate_snow(snow_chance);
+//    float snow_chance = 0.05;
+    struct winsize size = get_window_size();
+    rain_screen rain_screen1 = init_rain(size.ws_col, size.ws_row);
 
     for (int I = 0; I < 100; ++I)
     {
 //        terminal_erase_screen;
 
-        struct winsize size = get_window_size();
-        fill_screen(size);
+        unsigned char colors[][3] = {{255,0,0}, {0,255,0}, {255,0,255}};
+        unsigned char (*colors1)[3] = colors;
+        double positions[3] = {0,0.7, 1};
+        color_gradient_settings settings = {colors, (double *)positions, 3};
+        COLOR bg = color_create_background_rgb(0,0,0);
+        print_raindrop_settings r_settings = {settings, color_interpolator_square, bg};
+        fill_bg(size.ws_row, size.ws_col, r_settings);
         write_log(INFO, "Screen filed %d", I);
-        render_snow(&snow, snow_chance, I, 2);
+
+        rain_iteration(rain_screen1);
         write_log(INFO, "Snow rendered %d", I);
         fflush(stdout);
-        //printf("C");
+//        printf("C");
         fflush(stdout);
         msleep(100);
     }
-    free_string_array(&snow);
+    free_rain_screen(rain_screen1);
+
     write_log(INFO, "Program end");
 
     terminal_visible_cursor;
