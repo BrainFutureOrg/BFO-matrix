@@ -58,7 +58,7 @@ int main() {
     setlocale(LC_ALL, "");
     terminal_erase_display;
 
-    init_logger(INFO, "log.txt");
+    init_logger(DEBUG, "log.txt");
     write_log(INFO, "Program start");
 
 //    float snow_chance = 0.05;

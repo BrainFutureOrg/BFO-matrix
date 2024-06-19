@@ -6,6 +6,7 @@
 #include "random_letter.h"
 #include "library/random_bfo/statistical_random.h"
 #include "print_raindrop.h"
+#include "library/loging_bfo/log.h"
 
 #define DROP_CHANCE 0.1
 
@@ -56,6 +57,7 @@ void generate_rain_drop(rain_screen screen)
             new_drop.column = i;
             rain *new_list_elem = calloc(1, sizeof(rain));
             new_list_elem->drop = new_drop;
+
             new_list_elem->next = *screen.rain_list;
             *screen.rain_list = new_list_elem;
         }
@@ -73,13 +75,19 @@ rain_screen init_rain(int col_num, int row_num){
 }
 
 void rain_iteration(rain_screen screen){
+
     generate_rain_drop(screen);
+    write_log(DEBUG, "Screen app %ld", *screen.rain_list);
     rain *rain_list = *screen.rain_list;
     rain *prev_rain = NULL;
 
     while (rain_list != NULL)
     {
+        write_log(DEBUG, "rain_list row %d", rain_list->drop.row);
         rain_drop_iteration(&rain_list->drop);
+        write_log(DEBUG, "rain_list upd row %d used %d size %d", rain_list->drop.row, rain_list->drop.used, rain_list->drop.size);
+        write_log(DEBUG, "rain_list end");
+
         if(rain_list->drop.row == screen.row_num - 1)
         {
             rain *for_delete = rain_list;
@@ -98,7 +106,6 @@ void rain_iteration(rain_screen screen){
         else
         {
             unsigned char colors[][3] = {{255,0,0}, {0,255,0}, {255,0,255}};
-            unsigned char (*colors1)[3] = colors;
             double positions[3] = {0,0.7, 1};
             color_gradient_settings settings = {colors, (double *)positions, 3};
             COLOR bg = color_create_background_rgb(0,0,0);

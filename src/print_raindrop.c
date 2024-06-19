@@ -4,9 +4,10 @@
 
 #include "print_raindrop.h"
 #include "library/terminal_bfo/terminal_funcs.h"
+#include "library/loging_bfo/log.h"
 
 void print_raindrop(rain_drop raindrop, int row_num, int col_num, print_raindrop_settings settings){
-
+    write_log(DEBUG, "Snow printed %d", row_num);
     printf("%s", settings.background.line);
     if(raindrop.column<col_num){
         int end = raindrop.size+raindrop.row;
@@ -18,6 +19,7 @@ void print_raindrop(rain_drop raindrop, int row_num, int col_num, print_raindrop
             unsigned char* rgb = color_gradient_get_general(settings.gradient_settings, position_norm, settings.interpolator);
             COLOR color = color_create_foreground_rgb(rgb[0], rgb[1], rgb[2]);
             printf("%s%lc", color.line, raindrop.line[position]);
+            write_log(DEBUG, "Line to print: %lc", raindrop.line[position]);
             free_color(color);
             free(rgb);
         }
