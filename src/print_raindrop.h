@@ -1,0 +1,8 @@
+//
+// Created by kosenko on 19.06.24.
+//
+
+#ifndef BFO_MATRIX_SRC_PRINT_RAINDROP_H
+#define BFO_MATRIX_SRC_PRINT_RAINDROP_H
+
+#endif //BFO_MATRIX_SRC_PRINT_RAINDROP_H

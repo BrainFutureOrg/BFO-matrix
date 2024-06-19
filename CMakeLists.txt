@@ -20,6 +20,8 @@ add_executable(BFO_matrix
         src/color_gradient.c
         src/color_gradient.h
         src/rain.c
-        src/rain.h)
+        src/rain.h
+        src/print_raindrop.c
+        src/print_raindrop.h)
 
 target_link_libraries(BFO_matrix m)
