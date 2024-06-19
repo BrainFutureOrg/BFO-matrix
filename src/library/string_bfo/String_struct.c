@@ -7,6 +7,9 @@ string string_create_new(uint len)
 {
     string result;
     result.len = len;
+    if(len <= 0){
+        len = 1;
+    }
     result.line = calloc(len, sizeof(char));
     *result.line = '\0';
     return result;
