@@ -13,8 +13,13 @@
 #include "random_letter.h"
 #include "rain.h"
 #include "print_raindrop.h"
+#include "constants.h"
 
 #define background_fill color_to_rgb_background(20, 20, 20);
+
+
+
+
 /* msleep(): Sleep for the requested number of milliseconds. */
 int msleep(long msec)
 {
@@ -61,17 +66,16 @@ int main() {
     init_logger(INFO, "log.txt");
     write_log(INFO, "Program start");
 
-//    float snow_chance = 0.05;
     struct winsize size = get_window_size();
     rain_screen rain_screen1 = init_rain(size.ws_col, size.ws_row);
 
-    for (int I = 0; I < 200; ++I)
+    for (int I = 0; I < ITER_NUM; ++I)
     {
         terminal_erase_screen;
         rain_iteration(rain_screen1);
 
         fflush(stdout);
-        msleep(100);
+        msleep(MILISECONDS_DELAY);
     }
     free_rain_screen(rain_screen1);
 

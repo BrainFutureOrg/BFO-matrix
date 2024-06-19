@@ -8,12 +8,13 @@
 #include "print_raindrop.h"
 #include "library/loging_bfo/log.h"
 #include "default_themes.h"
+#include "constants.h"
 
-#define DROP_CHANCE 0.003
+
 
 rain_drop rain_drop_init()
 {
-    int rain_size = 13;
+    int rain_size = RAIN_LEN;
     return (rain_drop){0, 0, rain_size, 0, calloc(rain_size, sizeof(wchar_t))};
 }
 
@@ -117,7 +118,7 @@ void rain_iteration(rain_screen screen){
             color_gradient_settings settings = {colors, (double *)positions, 3};
             COLOR bg = string_create_new(0);//color_create_background_rgb(0,0,0);
             //print_raindrop_settings r_settings = {settings, color_interpolator_square, bg};
-            print_raindrop_settings r_settings = theme_Ukraine;
+            print_raindrop_settings r_settings = THEME;
             print_raindrop(rain_list->drop, screen.row_num, screen.col_num, r_settings);
             free_color(bg);
             prev_rain = rain_list;
