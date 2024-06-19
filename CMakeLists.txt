@@ -18,6 +18,8 @@ add_executable(BFO_matrix
         src/random_letter.c
         src/random_letter.h
         src/color_gradient.c
-        src/color_gradient.h)
+        src/color_gradient.h
+        src/rain.c
+        src/rain.h)
 
 target_link_libraries(BFO_matrix m)
