@@ -173,7 +173,11 @@ start_rain:
     struct winsize size = get_window_size();
     rain_screen rain_screen1 = init_rain(size.ws_col, size.ws_row);
 
-    while (!end_rain_var)
+#ifdef END_WITH_ITER_NUM
+    for (int I = 0; I < ITER_NUM; ++I)
+#else
+        while (!end_rain_var)
+#endif
     {
         terminal_erase_screen;
         rain_iteration(rain_screen1);
