@@ -187,6 +187,7 @@ start_rain:
         if (restart_rain_var)
         {
             restart_rain_var = 0;
+            free_rain_screen(rain_screen1);
             goto start_rain;
         }
     }
