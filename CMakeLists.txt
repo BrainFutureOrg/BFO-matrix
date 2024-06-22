@@ -25,6 +25,9 @@ add_executable(BFO_matrix
         src/print_raindrop.h
         src/default_themes.c
         src/default_themes.h
-        src/constants.h)
+        src/constants.h
+        src/signal_redifinition.c
+        src/signal_redifinition.h
+)
 
 target_link_libraries(BFO_matrix m)

@@ -4,7 +4,7 @@
 #ifndef LOGFILE_NAME
 #define LOGFILE_NAME "log.txt"
 #endif
-
+#include <stdarg.h>
 typedef enum
 {
     FATAL,

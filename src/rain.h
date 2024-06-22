@@ -8,8 +8,8 @@
 #include <wchar.h>
 #include <stdlib.h>
 
-
-typedef struct {
+typedef struct
+{
     int column;
     int row;
     int size;
@@ -17,12 +17,14 @@ typedef struct {
     wchar_t *line;
 } rain_drop;
 
-typedef struct rain{
+typedef struct rain
+{
     rain_drop drop;
     struct rain *next;
 } rain;
 
-typedef struct{
+typedef struct
+{
     int col_num, row_num;
     rain **rain_list;
 } rain_screen;
@@ -32,4 +34,8 @@ rain_screen init_rain(int col_num, int row_num);
 void rain_iteration(rain_screen screen);
 
 void free_rain_screen(rain_screen screen);
+
+void start_rain();
+void restart_rain();
+void end_rain();
 #endif //BFO_MATRIX_RAIN_H

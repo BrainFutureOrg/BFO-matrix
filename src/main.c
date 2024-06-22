@@ -14,70 +14,25 @@
 #include "rain.h"
 #include "print_raindrop.h"
 #include "constants.h"
+#include "signal_redifinition.h"
 
 #define background_fill color_to_rgb_background(20, 20, 20);
 
 
 
 
-/* msleep(): Sleep for the requested number of milliseconds. */
-int msleep(long msec)
-{
-    struct timespec ts;
-    int res;
-
-    if (msec < 0)
-    {
-        errno = EINVAL;
-        return -1;
-    }
-
-    ts.tv_sec = msec / 1000;
-    ts.tv_nsec = (msec % 1000) * 1000000;
-
-    do
-    {
-        res = nanosleep(&ts, &ts);
-    }
-    while (res && errno == EINTR);
-
-    return res;
-}
-
-struct winsize get_window_size()
-{
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    return w;
-}
-//struct uint_pair{
-//    uint x,y:3;
-//};
-
-
-
 int main() {
+    init_logger(DEBUG, "log.txt");
+    write_log(INFO, "Program start");
+
     terminal_save_screen;
     terminal_invisible_cursor;
     srandom(time(NULL));
     setlocale(LC_ALL, "");
     terminal_erase_display;
 
-    init_logger(INFO, "log.txt");
-    write_log(INFO, "Program start");
-
-    struct winsize size = get_window_size();
-    rain_screen rain_screen1 = init_rain(size.ws_col, size.ws_row);
-
-    for (int I = 0; I < ITER_NUM; ++I)
-    {
-        terminal_erase_screen;
-        rain_iteration(rain_screen1);
-
-        fflush(stdout);
-        msleep(MILISECONDS_DELAY);
-    }
-    free_rain_screen(rain_screen1);
+    redefine_signals();
+    start_rain();
 
     write_log(INFO, "Program end");
 
