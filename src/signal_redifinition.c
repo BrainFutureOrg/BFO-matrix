@@ -21,13 +21,15 @@ int catch_signal(int sig, void (*handler)(int))
     return sigaction(sig, &action, NULL);
 }
 
-void is_window_changed(int signal){
+void is_window_changed(int signal)
+{
 
     write_log(DEBUG, "window_changed");
     restart_rain();
 }
 
-void end_program(int signal){
+void end_program(int signal)
+{
 
     write_log(DEBUG, "program ended");
     end_rain();

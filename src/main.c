@@ -18,10 +18,8 @@
 
 #define background_fill color_to_rgb_background(20, 20, 20);
 
-
-
-
-int main() {
+int main()
+{
     init_logger(DEBUG, "log.txt");
     write_log(INFO, "Program start");
 
