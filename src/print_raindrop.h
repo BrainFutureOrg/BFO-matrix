@@ -4,7 +4,7 @@
 
 #ifndef BFO_MATRIX_SRC_PRINT_RAINDROP_H
 #define BFO_MATRIX_SRC_PRINT_RAINDROP_H
-#include "rain.h"
+
 #include "color_gradient.h"
 #include "library/terminal_bfo/colors_bfo/colors.h"
 
@@ -14,6 +14,8 @@ typedef struct
     color_interpolator interpolator;
     COLOR background;
 } print_raindrop_settings;
+
+#include "rain.h"
 
 void print_raindrop(rain_drop raindrop, int row_num, int col_num, print_raindrop_settings settings);
 

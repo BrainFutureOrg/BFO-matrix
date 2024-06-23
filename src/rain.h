@@ -7,7 +7,7 @@
 
 #include <wchar.h>
 #include <stdlib.h>
-#include "print_raindrop.h"
+
 #include "color_gradient.h"
 
 typedef struct
@@ -19,16 +19,9 @@ typedef struct
     wchar_t *line;
 } rain_drop;
 
-struct
-{
-    uint rain_len;
-    uint milliseconds_delay;
-    double drop_chance;
-    print_raindrop_settings
-    (*get_settings)(void);
-    char use_default_theme;
-    color_gradient_settings gradient_settings;
-} rain_params;
+#include "print_raindrop.h"
+
+struct rain_params;
 
 typedef struct rain
 {

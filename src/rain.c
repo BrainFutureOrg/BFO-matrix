@@ -14,6 +14,17 @@
 #include "library/terminal_bfo/terminal_funcs.h"
 #include "signal_redifinition.h"
 
+struct
+{
+    uint rain_len;
+    uint milliseconds_delay;
+    double drop_chance;
+    print_raindrop_settings
+    (*get_settings)(void);
+    char use_default_theme;
+    color_gradient_settings gradient_settings;
+} rain_params;
+
 rain_drop rain_drop_init()
 {
     int rain_size = (int)rain_params.rain_len;
