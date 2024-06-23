@@ -7,11 +7,11 @@
 #include "color_gradient.h"
 #include "print_raindrop.h"
 
-extern const print_raindrop_settings theme_red_green_magenta;
+print_raindrop_settings get_theme_red_green_magenta();
 
-extern const print_raindrop_settings theme_Ukraine;
+print_raindrop_settings get_theme_Ukraine();
 
-extern const print_raindrop_settings theme_green;
+print_raindrop_settings get_theme_green();
 
 print_raindrop_settings get_theme_BSOD();
 

@@ -29,3 +29,18 @@ print_raindrop_settings get_theme_BSOD()
     const print_raindrop_settings theme_BSOD = {settings_t4, color_interpolator_square, bg_t4};
     return theme_BSOD;
 }
+
+print_raindrop_settings get_theme_red_green_magenta()
+{
+    return theme_red_green_magenta;
+}
+
+print_raindrop_settings get_theme_Ukraine()
+{
+    return theme_Ukraine;
+}
+
+print_raindrop_settings get_theme_green()
+{
+    return theme_green;
+}

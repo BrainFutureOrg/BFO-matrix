@@ -207,3 +207,12 @@ void end_rain()
 {
     end_rain_var = 1;
 }
+
+void init_rain_params()
+{
+    rain_params.rain_len = RAIN_LEN;
+    rain_params.milliseconds_delay = MILLISECONDS_DELAY;
+    rain_params.drop_chance = DROP_CHANCE;
+    rain_params.get_settings = DEFAULT_THEME;
+    rain_params.use_default_theme = 1;
+}

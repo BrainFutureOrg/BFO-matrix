@@ -51,4 +51,6 @@ void free_rain_screen(rain_screen screen);
 void start_rain();
 void restart_rain();
 void end_rain();
+
+void init_rain_params();
 #endif //BFO_MATRIX_RAIN_H

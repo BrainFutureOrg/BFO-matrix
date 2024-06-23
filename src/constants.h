@@ -8,7 +8,7 @@
 #define RAIN_LEN 20
 #define DROP_CHANCE 0.01
 
-#define MILISECONDS_DELAY 15
+#define MILLISECONDS_DELAY 15
 
 //get_theme_red_green_magenta, get_theme_Ukraine, get_theme_green, get_theme_BSOD()
 #define DEFAULT_THEME get_theme_green
