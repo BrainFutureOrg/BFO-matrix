@@ -21,7 +21,20 @@ typedef struct
 
 #include "print_raindrop.h"
 
-struct rain_params;
+struct rainparams
+{
+    uint rain_len;
+    uint milliseconds_delay;
+    double drop_chance;
+    print_raindrop_settings
+    (*get_settings)(void);
+    char use_default_theme;
+    print_raindrop_settings raindrop_settings;
+    wchar_t
+    (*char_randomizer)(void);
+};
+
+extern struct rainparams rain_params;
 
 typedef struct rain
 {

@@ -14,16 +14,7 @@
 #include "library/terminal_bfo/terminal_funcs.h"
 #include "signal_redifinition.h"
 
-struct
-{
-    uint rain_len;
-    uint milliseconds_delay;
-    double drop_chance;
-    print_raindrop_settings
-    (*get_settings)(void);
-    char use_default_theme;
-    color_gradient_settings gradient_settings;
-} rain_params;
+struct rainparams rain_params;
 
 rain_drop rain_drop_init()
 {
@@ -56,7 +47,7 @@ void free_rain_screen(rain_screen screen)
 void rain_drop_iteration(rain_drop *drop)
 {
 //    write_log(DEBUG, "START RAIN DROP ITERATION");
-    wchar_t new_char = get_random_unicode_char();
+    wchar_t new_char = rain_params.char_randomizer();
     if (drop->used == drop->size)
     {
         for (int i = 0; i < drop->size - 1; i++)
@@ -187,7 +178,7 @@ start_rain:
 #ifdef END_WITH_ITER_NUM
     for (int I = 0; I < ITER_NUM; ++I)
 #else
-        while (!end_rain_var)
+    while (!end_rain_var)
 #endif
     {
         terminal_erase_screen;
@@ -226,4 +217,6 @@ void init_rain_params()
     rain_params.drop_chance = DROP_CHANCE;
     rain_params.get_settings = DEFAULT_THEME;
     rain_params.use_default_theme = 1;
+    rain_params.raindrop_settings = DEFAULT_THEME();
+    rain_params.char_randomizer = CHAR_RANDOM;
 }
