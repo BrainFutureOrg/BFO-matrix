@@ -10,8 +10,8 @@
 
 #define MILISECONDS_DELAY 15
 
-//theme_red_green_magenta, theme_Ukraine, theme_green, get_theme_BSOD()
-#define THEME theme_red_green_magenta
+//get_theme_red_green_magenta, get_theme_Ukraine, get_theme_green, get_theme_BSOD()
+#define DEFAULT_THEME get_theme_green
 
 #define END_WITH_ITER_NUM
 #ifdef END_WITH_ITER_NUM

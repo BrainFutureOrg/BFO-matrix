@@ -16,7 +16,7 @@
 
 rain_drop rain_drop_init()
 {
-    int rain_size = RAIN_LEN;
+    int rain_size = (int)rain_params.rain_len;
     return (rain_drop){0, 0, rain_size, 0, calloc(rain_size, sizeof(wchar_t))};
 }
 
@@ -66,7 +66,7 @@ void generate_rain_drop(rain_screen screen)
 {
     for (int i = 0; i < screen.col_num; ++i)
     {
-        if (rand_plain < DROP_CHANCE)
+        if (rand_plain < rain_params.drop_chance)
         {
             rain_drop new_drop = rain_drop_init();
             new_drop.column = i;
@@ -127,7 +127,7 @@ void rain_iteration(rain_screen screen)
             color_gradient_settings settings = {colors, (double *)positions, 3};
             COLOR bg = string_create_new(0);//color_create_background_rgb(0,0,0);
             //print_raindrop_settings r_settings = {settings, color_interpolator_square, bg};
-            print_raindrop_settings r_settings = THEME;
+            print_raindrop_settings r_settings = rain_params.get_settings();
             print_raindrop(rain_list->drop, screen.row_num, screen.col_num, r_settings);
             free_color(bg);
             prev_rain = rain_list;
@@ -183,7 +183,7 @@ start_rain:
         rain_iteration(rain_screen1);
 
         fflush(stdout);
-        msleep(MILISECONDS_DELAY);
+        msleep(rain_params.milliseconds_delay);
         if (restart_rain_var)
         {
             restart_rain_var = 0;

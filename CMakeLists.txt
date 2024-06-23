@@ -3,6 +3,10 @@ project(BFO_matrix C)
 
 set(CMAKE_C_STANDARD 11)
 
+execute_process(COMMAND git log -1 --pretty=format:%h
+        OUTPUT_VARIABLE outv)
+file(WRITE src/git_variables.h "#define GIT_LAST_COMMIT_HASH \"${outv}\"")
+
 add_executable(BFO_matrix
         src/main.c
         src/library/terminal_bfo/colors_bfo/colors.c
