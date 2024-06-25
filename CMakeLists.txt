@@ -32,7 +32,6 @@ add_executable(BFO_matrix
         src/constants.h
         src/signal_redifinition.c
         src/signal_redifinition.h
-        src/rain_params.h
 )
 
 target_link_libraries(BFO_matrix m)
