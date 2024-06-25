@@ -78,7 +78,7 @@ void print_version()
 
 char is_comma(char *c)
 {
-    return !strcmp(c, ",");
+    return *c == ',';
 }
 
 //#define CODE_READY
@@ -96,49 +96,49 @@ unsigned char *parse_color_arg(char *arg)
             result[i] = strtol(str_hex, NULL, 16);
         }
     }
-    else if (!(strcmp(arg, "black") & strcmp(arg, "k")))
+    else if (!(strcmp(arg, "black") && strcmp(arg, "k")))
     {
         result[0] = 0;
         result[1] = 0;
         result[2] = 0;
     }
-    else if (!(strcmp(arg, "red") & strcmp(arg, "r")))
+    else if (!(strcmp(arg, "red") && strcmp(arg, "r")))
     {
         result[0] = 255;
         result[1] = 0;
         result[2] = 0;
     }
-    else if (!(strcmp(arg, "green") & strcmp(arg, "g")))
+    else if (!(strcmp(arg, "green") && strcmp(arg, "g")))
     {
         result[0] = 0;
         result[1] = 255;
         result[2] = 0;
     }
-    else if (!(strcmp(arg, "blue") & strcmp(arg, "b")))
+    else if (!(strcmp(arg, "blue") && strcmp(arg, "b")))
     {
         result[0] = 0;
         result[1] = 0;
         result[2] = 255;
     }
-    else if (!(strcmp(arg, "yellow") & strcmp(arg, "y")))
+    else if (!(strcmp(arg, "yellow") && strcmp(arg, "y")))
     {
         result[0] = 255;
         result[1] = 255;
         result[2] = 0;
     }
-    else if (!(strcmp(arg, "cyan") & strcmp(arg, "c")))
+    else if (!(strcmp(arg, "cyan") && strcmp(arg, "c")))
     {
         result[0] = 0;
         result[1] = 255;
         result[2] = 255;
     }
-    else if (!(strcmp(arg, "magenta") & strcmp(arg, "m")))
+    else if (!(strcmp(arg, "magenta") && strcmp(arg, "m")))
     {
         result[0] = 255;
         result[1] = 0;
         result[2] = 255;
     }
-    else if (!(strcmp(arg, "white") & strcmp(arg, "w")))
+    else if (!(strcmp(arg, "white") && strcmp(arg, "w")))
     {
         result[0] = 255;
         result[1] = 255;
@@ -173,7 +173,7 @@ enum STOP_RESUME argv_checker(int argc, char **argv)
         else if (strcmp(argv[i], "--color") == 0 || strcmp(argv[i], "-c") == 0)
         {
             string unsplit = string_create_new(0);
-            while (argv[++i][0] != '-')
+            while (++i < argc && argv[i][0] != '-')
             {
                 string_add_charp(&unsplit, argv[i]);
             }
@@ -191,8 +191,10 @@ enum STOP_RESUME argv_checker(int argc, char **argv)
                     }
                     free(parsed);
                 }
+                rain_params.raindrop_settings.gradient_settings.len = split.size;
                 free_string_array(&split);
                 rain_params.raindrop_settings.gradient_settings.colors = color_list;
+                rain_params.use_default_theme = 0;
             }
             else
             {
@@ -202,9 +204,8 @@ enum STOP_RESUME argv_checker(int argc, char **argv)
         }
         else if (strcmp(argv[i], "--positions") == 0 || strcmp(argv[i], "-p") == 0)
         {
-#ifdef CODE_READY
             string unsplit = string_create_new(0);
-            while (argv[++i][0] != '-')
+            while (++i < argc && argv[i][0] != '-')
             {
                 string_add_charp(&unsplit, argv[i]);
             }
@@ -217,23 +218,23 @@ enum STOP_RESUME argv_checker(int argc, char **argv)
                 {
                     position_list[j] = strtod(string_array_get_element(&split, j).line, NULL);
                 }
+                rain_params.raindrop_settings.gradient_settings.len = split.size;
                 free_string_array(&split);
                 rain_params.raindrop_settings.gradient_settings.positions = position_list;
+                rain_params.use_default_theme = 0;
             }
             else
             {
                 printf("Positions not specified. See help");
             }
             free_string(unsplit);
-#endif
         }
         else if (strcmp(argv[i], "--background") == 0 || strcmp(argv[i], "-b") == 0)
         {
-#ifdef CODE_READY
             unsigned char *parsed = parse_color_arg(argv[++i]);
             rain_params.raindrop_settings.background =
                 color_create_background_rgb(parsed[0], parsed[1], parsed[2]);//TODO: FREE
-#endif
+            rain_params.use_default_theme = 0;
         }
         else if (strcmp(argv[i], "--theme") == 0 || strcmp(argv[i], "-t") == 0)
         {

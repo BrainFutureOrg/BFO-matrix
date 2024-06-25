@@ -129,7 +129,8 @@ void rain_iteration(rain_screen screen)
             color_gradient_settings settings = {colors, (double *)positions, 3};
             COLOR bg = string_create_new(0);//color_create_background_rgb(0,0,0);
             //print_raindrop_settings r_settings = {settings, color_interpolator_square, bg};
-            print_raindrop_settings r_settings = rain_params.get_settings();
+            print_raindrop_settings
+                r_settings = rain_params.use_default_theme ? rain_params.get_settings() : rain_params.raindrop_settings;
             print_raindrop(rain_list->drop, screen.row_num, screen.col_num, r_settings);
             free_color(bg);
             prev_rain = rain_list;
