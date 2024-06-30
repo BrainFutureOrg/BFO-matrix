@@ -16,10 +16,80 @@
 
 struct rainparams rain_params;
 
+typedef struct int_color_list int_color_list;
+struct int_color_list
+{
+    int key;
+    COLOR *value;
+    int_color_list *next;
+};
+
+int_color_list *color_dict = NULL;
+
+COLOR *recalculate_color(int len)
+{
+    //write_log(DEBUG, "recalculate started");
+    print_raindrop_settings
+        settings = rain_params.use_default_theme ? rain_params.get_settings() : rain_params.raindrop_settings;
+    COLOR *colors = malloc(len * sizeof(COLOR));
+    for (int i = 0; i < len; i++)
+    {
+        double position_norm = i / (len - 1.);
+        unsigned char
+            *rgb = color_gradient_get_general(settings.gradient_settings, position_norm, settings.interpolator);
+        colors[i] = color_create_foreground_rgb(rgb[0], rgb[1], rgb[2]);
+    }
+    //write_log(DEBUG, "recalculate ended");
+    return colors;
+}
+
+COLOR *get_or_create_colors(int len)
+{
+    //write_log(DEBUG, "get or create started");
+    int_color_list **color_dict_ptr = &color_dict;
+    if (color_dict != NULL)
+    {
+        int_color_list *color_dict_current = color_dict;
+        do
+        {
+            if (color_dict_current->key == len)
+            {
+                return color_dict_current->value;
+            }
+            color_dict_current = color_dict_current->next;
+        }
+        while (color_dict_current->next != NULL);
+        color_dict_ptr = &color_dict_current->next;
+    }
+
+    *color_dict_ptr = malloc(sizeof(int_color_list));
+    (*color_dict_ptr)->key = len;
+    (*color_dict_ptr)->value = recalculate_color(len);
+    (*color_dict_ptr)->next = NULL;
+    //write_log(DEBUG, "get or create ended");
+    return (*color_dict_ptr)->value;
+    /* message from valgrind:
+⠀⠀⠀⠀⠀⣀⡴⠖⠒⠒⢒⣒⡖⠒⠒⠒⠒⠒⠒⠶⠶⠤⣤⣀⣀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣴⠋⠀⠀⠤⣪⣝⡲⠯⠭⠥⠀⠀⠀⠀⠀⣀⣐⣒⡒⠉⠙⢦⡀⠀⠀
+⠀⠀⠀⣼⠃⠀⠈⠰⠫⠋⣀⣀⣀⣀⠀⠃⠀⠀⠀⠸⠀⠀⠀⠈⠆⠀⠀⢧⠀⠀
+⠀⣠⡾⠁⠀⡀⠠⠄⢰⣿⠿⠿⢯⣍⣙⣶⠀⠀⢀⣠⣶⣾⣿⠶⠆⠤⠤⢜⢷⡄
+⡾⢻⢡⡞⠋⣽⠛⠲⠤⡤⠴⠋⠀⠀⠉⠁⠀⠀⠈⣿⠁⠀⢀⣀⣠⠶⠶⣽⣵⣿
+⣇⢠⢸⡥⠶⣟⠛⠶⣤⣀⠀⠀⠀⢲⡖⣂⣀⠀⠀⠈⢳⣦⡀⠉⠉⣽⡄⠰⣻⣿
+⠙⣮⡪⠁⠀⠻⣶⣄⣸⣍⠙⠓⠶⣤⣥⣉⣉⠀⠠⠴⠋⠁⣈⣥⣴⣿⡇⠈⣽⠃
+⠀⠈⢻⡄⠀⠀⠙⣆⢹⡟⠷⣶⣤⣇⣀⠉⠙⡏⠉⢻⡟⢉⣹⣅⣼⣿⡇⠀⡏⠀
+⠀⠀⠀⠻⣄⠀⠀⠈⠻⢦⡀⠀⣽⠉⠛⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⡇⠀
+⠀⠀⠀⠀⠙⢦⣀⠄⡀⢄⡙⠻⠧⣤⣀⣀⣿⠀⠀⣿⢀⣼⣃⣾⣼⠟⠁⠀⡇⠀
+⠀⠀⠀⠀⠀⠀⠉⠓⢮⣅⡚⠵⣒⡤⢄⣉⠉⠉⠉⠉⠉⠉⠉⢀⡠⠀⠀⠀⣷⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠳⢦⣄⡉⠙⠛⠃⠀⠀⠀⠀⠉⠁⠀⠀⠀⠀⡿⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠲⠶⢤⣤⣀⣀⣀⣀⣀⣀⡤⠞⠁⠀⠀⠀⠀⠀⠀
+     */
+}
+
 rain_drop rain_drop_init()
 {
     int rain_size = (int)rain_params.rain_len;
-    return (rain_drop){0, 0, rain_size, 0, calloc(rain_size, sizeof(wchar_t))};
+    return (rain_drop){0, 0, rain_size, 0, get_or_create_colors(rain_size),
+                       calloc(rain_size, sizeof(wchar_t))};//TODO: is .used 1?
 }
 
 void free_rain_drop(rain_drop drop)

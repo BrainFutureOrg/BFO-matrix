@@ -6,7 +6,7 @@
 #include "library/terminal_bfo/terminal_funcs.h"
 #include "library/loging_bfo/log.h"
 
-unsigned char *color_gradient_get_reuse(int position,
+/*unsigned char *color_gradient_get_reuse(int position,
                                         int size,
                                         color_gradient_settings gradient_settings,
                                         color_interpolator interpolator)
@@ -25,7 +25,7 @@ unsigned char *color_gradient_get_reuse(int position,
 
         }
     }
-}
+}*/
 
 void print_raindrop(rain_drop raindrop, int row_num, int col_num, print_raindrop_settings settings)
 {
@@ -33,20 +33,29 @@ void print_raindrop(rain_drop raindrop, int row_num, int col_num, print_raindrop
     printf("%s", settings.background.line);
     if (raindrop.column < col_num)
     {
-        int end = raindrop.size + raindrop.row;
+        int end = raindrop.used + raindrop.row;//
         end = end > row_num ? row_num : end;
         for (int i = raindrop.row; i < end; i++)
         {
             terminal_goto_xy(raindrop.column + 1, i + 1);
-            int position = i - raindrop.row;
-            double position_norm = (double)(position + raindrop.size - raindrop.used) / (raindrop.size - 1);
-            unsigned char
-                *rgb = color_gradient_get_general(settings.gradient_settings, position_norm, settings.interpolator);
-            COLOR color = color_create_foreground_rgb(rgb[0], rgb[1], rgb[2]);
-            printf("%s%lc", color.line, raindrop.line[position]);
+            int position = i - raindrop.row + raindrop.size - raindrop.used;
+            //double position_norm = (double)(position + raindrop.size - raindrop.used) / (raindrop.size - 1);
+            //unsigned char
+            //*rgb = color_gradient_get_general(settings.gradient_settings, position_norm, settings.interpolator);
+            //COLOR color = color_create_foreground_rgb(rgb[0], rgb[1], rgb[2]);
+            /*write_log(DEBUG,
+                      "pre-print, position is %d, i = %d, row = %d, size = %d, used = %d, line = %ls",
+                      position,
+                      i,
+                      raindrop.row,
+                      raindrop.size,
+                      raindrop.used,
+                      raindrop.line);*/
+            printf("%s%lc", raindrop.colors[position].line, raindrop.line[position - raindrop.size + raindrop.used]);
+            //write_log(DEBUG, "post-print");
 //            write_log(DEBUG, "Line to print: %lc", raindrop.line[position]);
-            free_color(color);
-            free(rgb);
+            //free_color(color);
+            //free(rgb);
         }
     }
 }

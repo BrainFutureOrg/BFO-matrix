@@ -7,7 +7,7 @@
 
 #include <wchar.h>
 #include <stdlib.h>
-
+#include "library/terminal_bfo/colors_bfo/colors.h"
 #include "color_gradient.h"
 
 typedef struct
@@ -16,6 +16,7 @@ typedef struct
     int row;
     int size;
     int used;
+    COLOR *colors;
     wchar_t *line;
 } rain_drop;
 
