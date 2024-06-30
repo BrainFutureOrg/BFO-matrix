@@ -6,6 +6,27 @@
 #include "library/terminal_bfo/terminal_funcs.h"
 #include "library/loging_bfo/log.h"
 
+unsigned char *color_gradient_get_reuse(int position,
+                                        int size,
+                                        color_gradient_settings gradient_settings,
+                                        color_interpolator interpolator)
+{
+    static char first_start = 1;
+    static color_gradient_settings gradient_settings_prev;
+    static color_interpolator interpolator_prev;
+    if (first_start)
+    {
+
+    }
+    else
+    {
+        if (gradient_settings_prev != gradient_settings)
+        {
+
+        }
+    }
+}
+
 void print_raindrop(rain_drop raindrop, int row_num, int col_num, print_raindrop_settings settings)
 {
 //    write_log(DEBUG, "Snow printed %d", row_num);
