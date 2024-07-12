@@ -70,7 +70,7 @@ void print_help(char *prog_name)
 
 void print_version()
 {
-    printf(PROGRAM_NAME " - Version betta 0.1.%s\n\n", GIT_LAST_COMMIT_HASH);
+    printf(PROGRAM_NAME " - Version 0.1.%s\n\n", GIT_LAST_COMMIT_HASH);
     printf("It is free software: you are free to modify and distribute it.\n");
     printf("NO WARRANTIES are made to you, other than those provided by law.\n\n");
     printf("Authors of program are: Kosenko Olexander, Shkarupylo Maksym\n");
