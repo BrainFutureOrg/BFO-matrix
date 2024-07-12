@@ -32,8 +32,6 @@ add_executable(BFO_matrix
         src/constants.h
         src/signal_redifinition.c
         src/signal_redifinition.h
-        src/free_list.c
-        src/free_list.h
 )
 
 target_link_libraries(BFO_matrix m)
