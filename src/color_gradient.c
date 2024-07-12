@@ -5,6 +5,7 @@
 #include "color_gradient.h"
 #include <stdlib.h>
 #include <math.h>
+#include "library/loging_bfo/log.h"
 
 unsigned char *color_gradient_get_general(color_gradient_settings settings,
                                           double position,
@@ -89,4 +90,5 @@ double sqrt_scale(double x)
 unsigned char *color_interpolator_square(unsigned char *rgb1, unsigned char *rgb2, double position)
 {
     unsigned char *color = color_interpolator_simple_nonlinear(rgb1, rgb2, position, norm_square, sqrt_scale);
+    return color;
 }

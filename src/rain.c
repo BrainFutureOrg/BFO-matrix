@@ -28,7 +28,6 @@ int_color_list *color_dict = NULL;
 
 COLOR *recalculate_color(int len)
 {
-    //write_log(DEBUG, "recalculate started");
     print_raindrop_settings
         settings = rain_params.use_default_theme ? rain_params.get_settings() : rain_params.raindrop_settings;
     COLOR *colors = malloc(len * sizeof(COLOR));
@@ -38,14 +37,13 @@ COLOR *recalculate_color(int len)
         unsigned char
             *rgb = color_gradient_get_general(settings.gradient_settings, position_norm, settings.interpolator);
         colors[i] = color_create_foreground_rgb(rgb[0], rgb[1], rgb[2]);
+        free(rgb);
     }
-    //write_log(DEBUG, "recalculate ended");
     return colors;
 }
 
 COLOR *get_or_create_colors(int len)
 {
-    //write_log(DEBUG, "get or create started");
     int_color_list **color_dict_ptr = &color_dict;
     if (color_dict != NULL)
     {
@@ -66,7 +64,6 @@ COLOR *get_or_create_colors(int len)
     (*color_dict_ptr)->key = len;
     (*color_dict_ptr)->value = recalculate_color(len);
     (*color_dict_ptr)->next = NULL;
-    //write_log(DEBUG, "get or create ended");
     return (*color_dict_ptr)->value;
     /* message from valgrind:
 ⠀⠀⠀⠀⠀⣀⡴⠖⠒⠒⢒⣒⡖⠒⠒⠒⠒⠒⠒⠶⠶⠤⣤⣀⣀⠀⠀⠀⠀⠀
@@ -89,7 +86,7 @@ rain_drop rain_drop_init()
 {
     int rain_size = (int)rain_params.rain_len;
     return (rain_drop){0, 0, rain_size, 0, get_or_create_colors(rain_size),
-                       calloc(rain_size, sizeof(wchar_t))};//TODO: is .used 1?
+                       calloc(rain_size, sizeof(wchar_t))};
 }
 
 void free_rain_drop(rain_drop drop)
@@ -116,7 +113,6 @@ void free_rain_screen(rain_screen screen)
 
 void rain_drop_iteration(rain_drop *drop)
 {
-//    write_log(DEBUG, "START RAIN DROP ITERATION");
     wchar_t new_char = rain_params.char_randomizer();
     if (drop->used == drop->size)
     {
@@ -126,12 +122,9 @@ void rain_drop_iteration(rain_drop *drop)
         }
         drop->row++;
         drop->used--;
-//        write_log(DEBUG, "Screen app %d", drop->row);
     }
     drop->used++;
     drop->line[drop->used - 1] = new_char;
-
-//    write_log(DEBUG, "END RAIN DROP ITERATION");
 }
 
 void generate_rain_drop(rain_screen screen)
@@ -166,16 +159,12 @@ void rain_iteration(rain_screen screen)
 {
 
     generate_rain_drop(screen);
-//    write_log(DEBUG, "Screen app %ld", *screen.rain_list);
     rain *rain_list = *screen.rain_list;
     rain *prev_rain = NULL;
 
     while (rain_list != NULL)
     {
-//        write_log(DEBUG, "rain_list row %d", rain_list->drop.row);
         rain_drop_iteration(&rain_list->drop);
-//        write_log(DEBUG, "rain_list upd row %d used %d size %d", rain_list->drop.row, rain_list->drop.used, rain_list->drop.size);
-//        write_log(DEBUG, "rain_list end");
 
         if (rain_list->drop.row == screen.row_num - 1)
         {
@@ -197,8 +186,7 @@ void rain_iteration(rain_screen screen)
             unsigned char colors[][3] = {{255, 0, 0}, {0, 255, 0}, {255, 0, 255}};
             double positions[3] = {0, 0.7, 1};
             color_gradient_settings settings = {colors, (double *)positions, 3};
-            COLOR bg = string_create_new(0);//color_create_background_rgb(0,0,0);
-            //print_raindrop_settings r_settings = {settings, color_interpolator_square, bg};
+            COLOR bg = string_create_new(0);
             print_raindrop_settings
                 r_settings = rain_params.use_default_theme ? rain_params.get_settings() : rain_params.raindrop_settings;
             print_raindrop(rain_list->drop, screen.row_num, screen.col_num, r_settings);
@@ -265,10 +253,6 @@ start_rain:
         }
     }
     free_rain_screen(rain_screen1);
-
-//    write_log(INFO, "Program end");
-
-
 }
 
 void restart_rain()

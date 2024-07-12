@@ -7,6 +7,7 @@
 #include "library/loging_bfo/log.h"
 #include "rain.h"
 #include "signal_redifinition.h"
+#include "default_themes.h"
 
 #if __has_include("git_variables.h")
 #include "git_variables.h"
@@ -36,7 +37,7 @@ void print_help(char *prog_name)
     printf(SPACE_FOR_HELP "-v              --version     Show version info\n");
     printf(SPACE_FOR_HELP "-t <theme>      --theme       Default theme name (takes color and position lists from\n");
     printf(SPACE_FOR_HELP "                              default theme). <theme> is name from list: red_green_magenta,\n");
-    printf(SPACE_FOR_HELP "                              Ukrainian, green, BSOD\n");
+    printf(SPACE_FOR_HELP "                              Ukraine, green, BSOD\n");
 
     printf("RAIN COLOR SETTINGS\n");
     printf(SPACE_FOR_HELP "-c <colors>     --color       Set color of letters. <colors> is either one <color>\n");
@@ -48,7 +49,6 @@ void print_help(char *prog_name)
     printf(SPACE_FOR_HELP "                              colors list size. If this arg is absent, positions are\n");
     printf(SPACE_FOR_HELP "                              made uniformly\n\n");
     printf(SPACE_FOR_HELP "-b <color>      --background  Set color of background.\n");
-//    printf("\n");
 
     printf("RAIN SETTINGS\n");
     printf(SPACE_FOR_HELP "--rain_len <number>           Set len for each rain part (default is %u)\n",
@@ -81,7 +81,7 @@ char is_comma(char *c)
     return *c == ',';
 }
 
-//#define CODE_READY
+#define CODE_READY
 
 unsigned char *parse_color_arg(char *arg)
 {
@@ -146,17 +146,31 @@ unsigned char *parse_color_arg(char *arg)
     }
     return result;
 }
-#ifdef CODE_READY
+
 print_raindrop_settings (*theme_from_name(char *c))(void)
 {
-    if(!strcmp(c, "green")){
-        return
+    if (!strcmp(c, "green"))
+    {
+        return get_theme_green;
     }
+    if (!strcmp(c, "red_green_magenta"))
+    {
+        return get_theme_red_green_magenta;
+    }
+    if (!strcmp(c, "Ukraine"))
+    {
+        return get_theme_Ukraine;
+    }
+    if (!strcmp(c, "BSOD"))
+    {
+        return get_theme_BSOD;
+    }
+    return NULL;
 }
-#endif
 
 enum STOP_RESUME argv_checker(int argc, char **argv)
 {
+    char colors_specified = 0, positions_specified = 0;
     for (int i = 1; i < argc; ++i)
     {
         write_log(INFO, "argc = %d", argc);
@@ -181,7 +195,7 @@ enum STOP_RESUME argv_checker(int argc, char **argv)
             if (!string_charp_equals(unsplit, ""))
             {
                 string_array split = string_split(unsplit.line, is_comma);
-                unsigned char (*color_list)[3] = malloc(split.size * sizeof(unsigned char[3]));//TODO FREE SOMEWHERE
+                unsigned char (*color_list)[3] = malloc(split.size * sizeof(unsigned char[3]));
                 for (int j = 0; j < split.size; j++)
                 {
                     unsigned char *parsed = parse_color_arg(string_array_get_element(&split, j).line);
@@ -201,6 +215,7 @@ enum STOP_RESUME argv_checker(int argc, char **argv)
                 printf("Colors not specified. See help");
             }
             free_string(unsplit);
+            colors_specified = 1;
         }
         else if (strcmp(argv[i], "--positions") == 0 || strcmp(argv[i], "-p") == 0)
         {
@@ -213,7 +228,7 @@ enum STOP_RESUME argv_checker(int argc, char **argv)
             if (!string_charp_equals(unsplit, ""))
             {
                 string_array split = string_split(unsplit.line, is_comma);
-                double *position_list = malloc(split.size * sizeof(double));//TODO FREE SOMEWHERE
+                double *position_list = malloc(split.size * sizeof(double));
                 for (int j = 0; j < split.size; j++)
                 {
                     position_list[j] = strtod(string_array_get_element(&split, j).line, NULL);
@@ -228,17 +243,29 @@ enum STOP_RESUME argv_checker(int argc, char **argv)
                 printf("Positions not specified. See help");
             }
             free_string(unsplit);
+            positions_specified = 1;
         }
         else if (strcmp(argv[i], "--background") == 0 || strcmp(argv[i], "-b") == 0)
         {
             unsigned char *parsed = parse_color_arg(argv[++i]);
             rain_params.raindrop_settings.background =
-                color_create_background_rgb(parsed[0], parsed[1], parsed[2]);//TODO: FREE
+                color_create_background_rgb(parsed[0], parsed[1], parsed[2]);
             rain_params.use_default_theme = 0;
         }
         else if (strcmp(argv[i], "--theme") == 0 || strcmp(argv[i], "-t") == 0)
         {
-
+            print_raindrop_settings
+            (*theme)(void) = theme_from_name(argv[++i]);
+            if (theme == NULL)
+            {
+                printf("Theme not recognised. See help");
+                return STOP_PROGRAM;
+            }
+            else
+            {
+                rain_params.get_settings = theme;
+                rain_params.use_default_theme = 1;
+            }
         }
 
         else if (strcmp(argv[i], "--rain_len") == 0)
@@ -333,6 +360,22 @@ enum STOP_RESUME argv_checker(int argc, char **argv)
         {
             printf("To see available options type '%s --help'\n", argv[0]);
             return STOP_PROGRAM;
+        }
+    }
+    if (colors_specified && !positions_specified)
+    {
+        int color_num = rain_params.raindrop_settings.gradient_settings.len;
+        rain_params.raindrop_settings.gradient_settings.positions = malloc(color_num * sizeof(double));
+        if (color_num == 1)
+        {
+            rain_params.raindrop_settings.gradient_settings.positions[0] = 1;
+        }
+        else
+        {
+            for (int i = 0; i < color_num; i++)
+            {
+                rain_params.raindrop_settings.gradient_settings.positions[i] = i / (color_num - 1.);
+            }
         }
     }
     return RESUME_PROGRAM;
